@@ -75,16 +75,15 @@ npm run sync:directory                # update src/data/marketplace-communities.
 
 The scraper uses native `fetch` (2 concurrent detail requests, 15s timeouts). It copies invite tokens only when the directory publishes them, and keeps curated `featuredRank` / accent / BuzzFTW-only rows.
 
-### Daily job
+### Weekday routine (Grok Bot box)
 
-[`.github/workflows/sync-buzz-directory.yml`](.github/workflows/sync-buzz-directory.yml) runs every day at 13:15 UTC and on `workflow_dispatch`:
+Do **not** run this from GitHub Actions. The catalog refresh is a weekday routine on Ryan's Grok Bot box (same command locally):
 
-1. Sync the directory into the generated catalog
-2. If data changed, commit to the current branch with `[skip ci]` (avoids a workflow loop)
-3. Build the Astro site (`PUBLIC_COGNITO_*` from repo variables when set)
-4. Deploy to S3 + CloudFront **only when** `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` secrets exist. Defaults: `MARKETING_BUCKET=buzzftw-com-marketing`, `MARKETING_DISTRIBUTION_ID=EF2IOL0B900JI`.
+```bash
+npm run sync:directory
+```
 
-If those AWS secrets are missing, deploy stays manual:
+That writes `src/data/marketplace-communities.generated.ts`. After the catalog changes, commit as usual. To publish the marketplace:
 
 ```bash
 export MARKETING_BUCKET=buzzftw-com-marketing
