@@ -7,10 +7,16 @@ const base = import.meta.env.BASE_URL;
 <footer class="footer">
   <div class="wrap footer__inner">
     <div class="footer__brand">
-      <img src={`${base}mark.svg`} width="22" height="22" alt="" />
-      <span>Folstad AI</span>
+      <img src={`${base}mark.svg`} width="24" height="24" alt="" />
+      <span>BuzzFTW</span>
     </div>
-    <p class="footer__copy">Folstad AI is a service of Folstad Consulting Inc.</p>
+    <nav class="footer__nav" aria-label="Footer">
+      <a href={`${base}#explore`}>Explore</a>
+      <a href={`${base}launch`}>Launch</a>
+      <a href={`${base}dashboard`}>Dashboard</a>
+      <a href="https://buzz.xyz" target="_blank" rel="noopener noreferrer">Buzz Desktop</a>
+    </nav>
+    <p class="footer__copy">BuzzFTW is a service of Folstad Consulting Inc.</p>
     <a class="footer__x" href={X_DM_URL} target="_blank" rel="noopener noreferrer">{X_HANDLE}</a>
   </div>
 </footer>
@@ -29,6 +35,23 @@ const base = import.meta.env.BASE_URL;
     justify-content: space-between;
   }
 
+  .footer__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.1rem;
+  }
+
+  .footer__nav a {
+    font-size: var(--text-xs);
+    color: var(--slate);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+
+  .footer__nav a:hover {
+    color: var(--signal);
+  }
+
   .footer__brand {
     display: inline-flex;
     align-items: center;
@@ -40,9 +63,9 @@ const base = import.meta.env.BASE_URL;
   }
 
   .footer__brand img {
-    width: 1.35rem;
-    height: 1.35rem;
-    opacity: 0.9;
+    width: 1.5rem;
+    height: 1.5rem;
+    object-fit: contain;
   }
 
   .footer__copy {

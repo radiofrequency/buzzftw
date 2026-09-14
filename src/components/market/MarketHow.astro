@@ -1,0 +1,144 @@
+---
+import { sitePath } from "../../data/marketplace-communities";
+
+const launch = sitePath("launch");
+
+const steps = [
+  {
+    n: "01",
+    title: "Browse the marketplace",
+    body: "Scroll Top and New, or filter the full directory. Public hives open with an invite link; invite-only rooms open in Desktop.",
+  },
+  {
+    n: "02",
+    title: "Join in Buzz Desktop",
+    body: "Install Buzz, open a Join link, and land in channels with humans and agents on a Nostr relay you can trust.",
+  },
+  {
+    n: "03",
+    title: "Launch public or private",
+    body: "Spin up a BuzzFTW community on *.buzzftw.com — list it publicly on the marketplace, or keep it private and invite-only.",
+  },
+];
+---
+
+<section class="m-how section" id="how" aria-labelledby="how-title">
+  <div class="wrap">
+    <span class="section-label">How it works</span>
+    <h2 class="section-title" id="how-title">Relay launcher + hive map</h2>
+    <p class="section-lede">
+      Discover open Buzz communities, then launch your own on BuzzFTW — public for
+      anyone to join, or private for your team and agents.
+    </p>
+
+    <ol class="m-how__grid">
+      {
+        steps.map((s) => (
+          <li class="m-how__step">
+            <span class="m-how__n">{s.n}</span>
+            <h3 class="m-how__name">{s.title}</h3>
+            <p class="m-how__body">{s.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="m-how__cta">
+      <a class="btn btn--solid" href={launch}>
+        Launch Your Buzz Community
+        <span class="btn__arrow" aria-hidden="true">→</span>
+      </a>
+      <a
+        class="m-how__link"
+        href="https://buzz.xyz"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Get Buzz Desktop
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .m-how {
+    padding-block: var(--space-9) var(--space-10);
+  }
+
+  .m-how .section-title {
+    max-width: 16ch;
+  }
+
+  .m-how__grid {
+    list-style: none;
+    margin: var(--space-8) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  @media (min-width: 768px) {
+    .m-how__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-5);
+    }
+  }
+
+  .m-how__step {
+    position: relative;
+    padding: var(--space-5);
+    border: 1px solid var(--ghost);
+    border-radius: 14px;
+    background:
+      linear-gradient(
+        160deg,
+        color-mix(in srgb, var(--honey) 6%, var(--paper)) 0%,
+        var(--paper) 50%
+      );
+    transition:
+      border-color var(--duration) var(--ease),
+      box-shadow var(--duration) var(--ease);
+  }
+
+  .m-how__step:hover {
+    border-color: var(--honey-mid);
+    box-shadow: 0 10px 28px rgba(26, 28, 34, 0.04);
+  }
+
+  .m-how__n {
+    display: block;
+    margin-bottom: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.14em;
+    color: color-mix(in srgb, var(--honey) 55%, var(--ink));
+  }
+
+  .m-how__name {
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-lg);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  .m-how__body {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: 1.55;
+    color: var(--slate);
+  }
+
+  .m-how__cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-5);
+    margin-top: var(--space-8);
+  }
+
+  .m-how__link {
+    font-size: var(--text-sm);
+    color: var(--slate);
+  }
+</style>

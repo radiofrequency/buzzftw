@@ -1,0 +1,235 @@
+---
+import type { MarketplaceCommunity } from "../../data/marketplace-communities";
+import CommunityCard from "./CommunityCard.astro";
+
+interface Props {
+  id: string;
+  label: string;
+  title: string;
+  communities: MarketplaceCommunity[];
+  /** Show #rank on cards */
+  ranked?: boolean;
+  /** Show relative new labels */
+  showNew?: boolean;
+  lede?: string;
+}
+
+const { id, label, title, communities, ranked = false, showNew = false, lede } =
+  Astro.props;
+---
+
+<section class="m-carousel" id={id} aria-labelledby={`${id}-title`}>
+  <div class="wrap m-carousel__head">
+    <div class="m-carousel__intro">
+      <span class="section-label">{label}</span>
+      <h2 class="m-carousel__title" id={`${id}-title`}>{title}</h2>
+      {lede && <p class="m-carousel__lede">{lede}</p>}
+    </div>
+    <div class="m-carousel__controls" data-carousel-controls>
+      <button
+        type="button"
+        class="m-carousel__btn"
+        data-carousel-prev
+        aria-label={`Previous ${title}`}
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button
+        type="button"
+        class="m-carousel__btn"
+        data-carousel-next
+        aria-label={`Next ${title}`}
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  {
+    communities.length === 0 ? (
+      <div class="wrap">
+        <p class="m-carousel__empty">No communities listed yet.</p>
+      </div>
+    ) : (
+      <div class="m-carousel__viewport is-at-start" data-carousel-root>
+        <div
+          class="m-carousel__track"
+          data-carousel-track
+          tabindex="0"
+          role="list"
+          aria-label={title}
+        >
+          {communities.map((c, i) => (
+            <div role="listitem">
+              <CommunityCard
+                community={c}
+                rank={ranked ? i + 1 : undefined}
+                showNew={showNew}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+</section>
+
+<style>
+  .m-carousel {
+    padding-block: var(--space-7) var(--space-8);
+    overflow: hidden;
+  }
+
+  .m-carousel__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+
+  .m-carousel__intro .section-label {
+    margin-bottom: var(--space-2);
+  }
+
+  .m-carousel__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: var(--leading-tight);
+    color: var(--ink);
+  }
+
+  .m-carousel__lede {
+    margin: 0.4rem 0 0;
+    max-width: 36rem;
+    font-size: var(--text-sm);
+    color: var(--slate);
+    line-height: 1.45;
+  }
+
+  .m-carousel__controls {
+    display: flex;
+    gap: 0.4rem;
+    flex-shrink: 0;
+    padding-bottom: 0.1rem;
+  }
+
+  .m-carousel__btn {
+    width: 2.55rem;
+    height: 2.55rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--ghost-strong);
+    border-radius: 999px;
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+    transition:
+      background var(--duration) var(--ease),
+      border-color var(--duration) var(--ease),
+      opacity var(--duration) var(--ease),
+      color var(--duration) var(--ease);
+  }
+
+  .m-carousel__btn:hover:not(:disabled) {
+    background: var(--signal-soft);
+    border-color: var(--signal-mid);
+    color: var(--signal);
+  }
+
+  .m-carousel__btn:disabled {
+    opacity: 0.32;
+    cursor: default;
+  }
+
+  .m-carousel__viewport {
+    position: relative;
+  }
+
+  .m-carousel__viewport::before,
+  .m-carousel__viewport::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    bottom: 0.5rem;
+    width: clamp(1.5rem, 4vw, 3rem);
+    z-index: 2;
+    opacity: 1;
+    transition: opacity var(--duration) var(--ease);
+  }
+
+  .m-carousel__viewport::before {
+    left: 0;
+    background: linear-gradient(90deg, var(--paper) 20%, transparent);
+  }
+
+  .m-carousel__viewport::after {
+    right: 0;
+    background: linear-gradient(270deg, var(--paper) 20%, transparent);
+  }
+
+  .m-carousel__viewport.is-at-start::before {
+    opacity: 0;
+  }
+
+  .m-carousel__viewport.is-at-end::after {
+    opacity: 0;
+  }
+
+  .m-carousel__track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: max(
+      var(--space-6),
+      calc((100% - min(100% - var(--space-6), var(--max))) / 2 + var(--space-3))
+    );
+    padding-inline: max(
+      var(--space-6),
+      calc((100% - min(100% - var(--space-6), var(--max))) / 2 + var(--space-3))
+    );
+    padding-block: 0.45rem 0.85rem;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    outline: none;
+    cursor: grab;
+    user-select: none;
+  }
+
+  .m-carousel__track.is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+  }
+
+  .m-carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .m-carousel__track {
+      scroll-padding-inline: max(
+        var(--space-8),
+        calc((100% - min(100% - var(--space-8), var(--max))) / 2 + var(--space-4))
+      );
+      padding-inline: max(
+        var(--space-8),
+        calc((100% - min(100% - var(--space-8), var(--max))) / 2 + var(--space-4))
+      );
+    }
+  }
+
+  .m-carousel__empty {
+    margin: 0;
+    color: var(--slate);
+    font-size: var(--text-sm);
+  }
+</style>

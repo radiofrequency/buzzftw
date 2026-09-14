@@ -1,25 +1,27 @@
 ---
 const base = import.meta.env.BASE_URL;
 const home = base.endsWith("/") ? base : `${base}/`;
-const isHome = Astro.url.pathname === home || Astro.url.pathname === base || Astro.url.pathname === "/";
-
-/** Hash links work on the homepage; subpages need full home + hash. */
-const section = (hash: string) => (isHome ? hash : `${home}${hash}`);
+const launch = `${base}launch`.replace(/\/{2,}/g, "/").replace(":/", "://");
+const dashboard = `${base}dashboard`.replace(/\/{2,}/g, "/").replace(":/", "://");
+const isHome =
+  Astro.url.pathname === home ||
+  Astro.url.pathname === base ||
+  Astro.url.pathname === "/";
 
 const links = [
-  { href: section("#what-we-do"), label: "What" },
-  { href: section("#how-we-do-it"), label: "How" },
-  { href: section("#starter-kits"), label: "Kits" },
-  { href: section("#pricing"), label: "Pricing" },
-  { href: section("#contact"), label: "Contact" },
+  { href: isHome ? "#top" : `${home}#top`, label: "Top" },
+  { href: isHome ? "#new" : `${home}#new`, label: "New" },
+  { href: isHome ? "#explore" : `${home}#explore`, label: "Explore" },
+  { href: isHome ? "#how" : `${home}#how`, label: "How" },
+  { href: dashboard, label: "Dashboard" },
 ];
 ---
 
 <header class="nav">
   <div class="nav__inner wrap">
-    <a class="nav__brand" href={isHome ? "#hero" : home} aria-label="Folstad AI home">
-      <img class="nav__mark" src={`${base}mark.svg`} width="28" height="28" alt="" />
-      <span class="nav__word">Folstad<span class="nav__ai"> AI</span></span>
+    <a class="nav__brand" href={isHome ? "#hero" : home} aria-label="BuzzFTW home">
+      <img class="nav__mark" src={`${base}mark.svg`} width="32" height="32" alt="BuzzFTW" />
+      <span class="nav__word">Buzz<span class="nav__ai">FTW</span></span>
     </a>
 
     <button
@@ -42,6 +44,9 @@ const links = [
           </a>
         ))
       }
+      <a class="nav__cta" href={launch} data-nav-link>
+        Launch
+      </a>
     </nav>
   </div>
 </header>
@@ -79,9 +84,10 @@ const links = [
   }
 
   .nav__mark {
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 2rem;
+    height: 2rem;
     flex-shrink: 0;
+    object-fit: contain;
   }
 
   .nav__word {
@@ -134,6 +140,28 @@ const links = [
   .nav__link:hover::after {
     opacity: 1;
     transform: scaleX(1);
+  }
+
+  .nav__cta {
+    margin-left: 0.35rem;
+    padding: 0.45rem 0.95rem;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--paper);
+    text-decoration: none;
+    background: var(--ink);
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+    transition:
+      background var(--duration) var(--ease),
+      border-color var(--duration) var(--ease);
+  }
+
+  .nav__cta:hover {
+    background: color-mix(in srgb, var(--ink) 88%, var(--honey));
+    border-color: color-mix(in srgb, var(--ink) 88%, var(--honey));
+    color: var(--paper);
   }
 
   .nav__toggle {
@@ -198,6 +226,12 @@ const links = [
 
     .nav__link::after {
       display: none;
+    }
+
+    .nav__cta {
+      margin: var(--space-4) 0 0;
+      text-align: center;
+      border-radius: 8px;
     }
   }
 
