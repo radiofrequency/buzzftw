@@ -1,0 +1,14 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import BuzzWizard from "../components/buzz/BuzzWizard.astro";
+---
+
+<BaseLayout
+  title="Launch your Buzz community | BuzzFTW"
+  description="Launch a public or private Buzz community on BuzzFTW. Free for a limited time."
+>
+  <BuzzWizard />
+  <script>
+    import "../scripts/buzz-wizard.ts";
+  </script>
+</BaseLayout>

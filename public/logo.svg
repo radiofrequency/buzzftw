@@ -1,36 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 64" fill="none" role="img" aria-label="Folstad AI">
-  <!-- Aperture mark -->
-  <g transform="translate(0,0)">
-    <circle
-      cx="32"
-      cy="32"
-      r="22"
-      stroke="#3D6B8C"
-      stroke-width="2.25"
-      stroke-linecap="round"
-      stroke-dasharray="118 20"
-      stroke-dashoffset="8"
-    />
-    <circle cx="32" cy="32" r="5.5" stroke="#3D6B8C" stroke-width="1.75" />
-    <circle cx="32" cy="32" r="1.6" fill="#3D6B8C" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 64" fill="none" role="img" aria-label="BuzzFTW">
+  <g>
+    <circle cx="14" cy="36" r="14" fill="#1A1C22"/>
+    <circle cx="50" cy="36" r="14" fill="#1A1C22"/>
+    <rect x="20" y="14" width="24" height="42" rx="10" fill="#1A1C22"/>
+    <circle cx="27.5" cy="24" r="3" fill="#F7F6F3"/>
+    <circle cx="36.5" cy="24" r="3" fill="#F7F6F3"/>
+    <path fill="#F0B429" d="M35.5 32H28l-1.2 8.5h5.2L28.5 52 41 38.5h-5.8L35.5 32z"/>
   </g>
-  <!-- Wordmark -->
   <text
     x="72"
-    y="30"
+    y="40"
     font-family="system-ui, -apple-system, 'Segoe UI', sans-serif"
-    font-size="18"
-    font-weight="500"
-    letter-spacing="0.28em"
+    font-size="22"
+    font-weight="700"
+    letter-spacing="-0.03em"
     fill="#1A1C22"
-  >FOLSTAD</text>
-  <text
-    x="72"
-    y="48"
-    font-family="system-ui, -apple-system, 'Segoe UI', sans-serif"
-    font-size="10"
-    font-weight="400"
-    letter-spacing="0.42em"
-    fill="#5C6370"
-  >AI</text>
+  >BuzzFTW</text>
 </svg>

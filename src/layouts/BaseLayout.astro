@@ -7,16 +7,24 @@ interface Props {
 }
 
 const {
-  title = "Folstad AI — Integrate AI. Automate the work that wastes people.",
-  description = "Folstad AI builds custom AI agents for your business — email, support, data, legal, accounting, and more. Starter kits for SMEs. Reach out on X @RyanFrequency.",
+  title = "BuzzFTW — Buzz Community Marketplace",
+  description = "Discover Buzz communities and launch public or private relays on BuzzFTW for humans and agents.",
 } = Astro.props;
 
+const siteOrigin = Astro.site?.origin ?? "https://www.buzzftw.com";
 const canonical = Astro.site
   ? new URL(Astro.url.pathname, Astro.site).href
   : undefined;
 
-/** Optional GA4 — set PUBLIC_GA_MEASUREMENT_ID (e.g. G-XXXXXXXX) at build time. */
-const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID as string | undefined;
+/** Absolute URL required for link unfurls (Slack, X, iMessage, Discord, etc.). */
+const basePath = import.meta.env.BASE_URL || "/";
+const ogImage = new URL(`${basePath}logo.png`.replace(/\/{2,}/g, "/"), `${siteOrigin}/`).href;
+const ogImageAlt = "BuzzFTW — Buzz Community Marketplace";
+
+/** GA4 — default BuzzFTW property; override with PUBLIC_GA_MEASUREMENT_ID at build time. */
+const gaId =
+  (import.meta.env.PUBLIC_GA_MEASUREMENT_ID as string | undefined)?.trim() ||
+  "G-E7WE8T494E";
 ---
 
 <!doctype html>
@@ -32,16 +40,26 @@ const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID as string | undefined;
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:site_name" content="Buzz" />
+    <meta property="og:site_name" content="BuzzFTW" />
     {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="1024" />
+    <meta property="og:image:alt" content={ogImageAlt} />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:site" content="@RyanFrequency" />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
 
-    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
-    <link rel="apple-touch-icon" href={`${import.meta.env.BASE_URL}mark.svg`} />
+    <link rel="manifest" href={`${import.meta.env.BASE_URL}site.webmanifest`} />
+    <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.ico`} sizes="any" />
+    <link rel="icon" type="image/png" sizes="16x16" href={`${import.meta.env.BASE_URL}favicon-16x16.png`} />
+    <link rel="icon" type="image/png" sizes="32x32" href={`${import.meta.env.BASE_URL}favicon-32x32.png`} />
+    <link rel="apple-touch-icon" sizes="180x180" href={`${import.meta.env.BASE_URL}apple-touch-icon.png`} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

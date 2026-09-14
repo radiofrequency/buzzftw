@@ -1,0 +1,233 @@
+---
+import type { MarketplaceCommunity } from "../../data/marketplace-communities";
+import CommunityCard from "./CommunityCard.astro";
+
+interface Props {
+  communities: MarketplaceCommunity[];
+  tags: string[];
+}
+
+const { communities, tags } = Astro.props;
+---
+
+<section class="m-explore section section--veil" id="explore" aria-labelledby="explore-title">
+  <div class="wrap" data-explore>
+    <div class="m-explore__head">
+      <div>
+        <span class="section-label">Directory</span>
+        <h2 class="m-explore__title" id="explore-title">Explore all hives</h2>
+        <p class="m-explore__lede">
+          Filter by topic or search by name. Public hives join in the browser;
+          invite-only open in Desktop. Launch your own as public or private on
+          BuzzFTW.
+        </p>
+      </div>
+      <p class="m-explore__count" data-explore-count aria-live="polite">
+        {communities.length} communities
+      </p>
+    </div>
+
+    <div class="m-explore__toolbar">
+      <label class="m-explore__search">
+        <span class="visually-hidden">Search communities</span>
+        <input
+          type="search"
+          placeholder="Search name, tag, description…"
+          data-explore-search
+          autocomplete="off"
+        />
+      </label>
+      <div class="m-explore__chips" role="group" aria-label="Filter by category">
+        <button
+          type="button"
+          class="m-explore__chip is-active"
+          data-explore-tag="all"
+          aria-pressed="true"
+        >
+          All
+        </button>
+        {
+          tags.map((t) => (
+            <button
+              type="button"
+              class="m-explore__chip"
+              data-explore-tag={t}
+              aria-pressed="false"
+            >
+              {t}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="m-explore__grid">
+      {
+        communities.map((c) => (
+          <div
+            class="m-explore__item"
+            data-explore-card
+            data-tags={c.tags.join(",")}
+            data-name={c.name.toLowerCase()}
+            data-blurb={c.blurb.toLowerCase()}
+          >
+            <CommunityCard community={c} compact />
+          </div>
+        ))
+      }
+    </div>
+
+    <p class="m-explore__empty" data-explore-empty hidden>
+      No communities match. Try another tag or clear search.
+    </p>
+  </div>
+</section>
+
+<style>
+  .m-explore {
+    padding-block: var(--space-9) var(--space-10);
+  }
+
+  .m-explore__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .m-explore__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: var(--leading-tight);
+    color: var(--ink);
+  }
+
+  .m-explore__lede {
+    margin: 0.45rem 0 0;
+    max-width: 36rem;
+    font-size: var(--text-sm);
+    color: var(--slate);
+    line-height: 1.5;
+  }
+
+  .m-explore__count {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--slate);
+  }
+
+  .m-explore__toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .m-explore__search input {
+    width: 100%;
+    max-width: 28rem;
+    padding: 0.7rem 0.95rem;
+    border: 1px solid var(--ghost-strong);
+    border-radius: 10px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+  }
+
+  .m-explore__search input::placeholder {
+    color: color-mix(in srgb, var(--slate) 75%, transparent);
+  }
+
+  .m-explore__search input:focus {
+    outline: none;
+    border-color: var(--signal-mid);
+    box-shadow: 0 0 0 3px var(--signal-soft);
+  }
+
+  .m-explore__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .m-explore__chip {
+    padding: 0.4rem 0.75rem;
+    border: 1px solid var(--ghost-strong);
+    border-radius: 999px;
+    background: var(--paper);
+    color: var(--slate);
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition:
+      background var(--duration) var(--ease),
+      border-color var(--duration) var(--ease),
+      color var(--duration) var(--ease);
+  }
+
+  .m-explore__chip:hover {
+    border-color: var(--signal-mid);
+    color: var(--ink);
+  }
+
+  .m-explore__chip.is-active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+
+  .m-explore__grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 560px) {
+    .m-explore__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .m-explore__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .m-explore__item {
+    min-width: 0;
+  }
+
+  .m-explore__item :global(.m-card) {
+    width: 100%;
+  }
+
+  .m-explore__empty {
+    margin: var(--space-6) 0 0;
+    font-size: var(--text-sm);
+    color: var(--slate);
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

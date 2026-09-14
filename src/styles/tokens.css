@@ -9,6 +9,10 @@
   --signal: #3d6b8c;
   --signal-soft: rgba(61, 107, 140, 0.12);
   --signal-mid: rgba(61, 107, 140, 0.22);
+  --honey: #f0b429;
+  --honey-soft: rgba(240, 180, 41, 0.14);
+  --honey-mid: rgba(240, 180, 41, 0.28);
+  --max-wide: 78rem;
 
   --font-display: "Newsreader", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
   --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;

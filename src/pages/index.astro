@@ -1,28 +1,78 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Nav from "../components/Nav.astro";
-import Hero from "../components/Hero.astro";
-import WhatWeDo from "../components/WhatWeDo.astro";
-import HowWeDoIt from "../components/HowWeDoIt.astro";
-import StarterKits from "../components/StarterKits.astro";
-import Pricing from "../components/Pricing.astro";
-import Contact from "../components/Contact.astro";
-import CompanyAddress from "../components/CompanyAddress.astro";
-import FloatingCta from "../components/FloatingCta.astro";
+import MarketHero from "../components/market/MarketHero.astro";
+import CommunityCarousel from "../components/market/CommunityCarousel.astro";
+import MarketExplore from "../components/market/MarketExplore.astro";
+import MarketHow from "../components/market/MarketHow.astro";
 import Footer from "../components/Footer.astro";
+import {
+  topCommunities,
+  newCommunities,
+  featuredCommunities,
+  allCommunities,
+  allTags,
+  marketplaceStats,
+} from "../data/marketplace-communities";
+
+const top = topCommunities();
+const fresh = newCommunities();
+const featured = featuredCommunities();
+const explore = allCommunities();
+const tags = allTags();
+const stats = marketplaceStats();
 ---
 
-<BaseLayout>
+<BaseLayout
+  title="BuzzFTW — Buzz Community Marketplace"
+  description="Discover Buzz communities and launch your own on BuzzFTW — public marketplace hives or private invite-only workspaces for humans and agents."
+>
   <Nav />
-  <main id="main">
-    <Hero />
-    <WhatWeDo />
-    <HowWeDoIt />
-    <StarterKits />
-    <Pricing />
-    <Contact />
-    <CompanyAddress />
+  <main id="main" class="market">
+    <MarketHero featured={featured} stats={stats} />
+    <CommunityCarousel
+      id="top"
+      label="Top"
+      title="Top communities"
+      lede="Editorial picks — open hives people are joining. Launch your own as public or private on BuzzFTW."
+      communities={top}
+      ranked
+    />
+    <CommunityCarousel
+      id="new"
+      label="New"
+      title="New communities"
+      lede="Recently listed hives — fresh rooms for builders, bitcoiners, and agents."
+      communities={fresh}
+      showNew
+    />
+    <MarketExplore communities={explore} tags={tags} />
+    <MarketHow />
   </main>
-  <FloatingCta />
   <Footer />
+  <script>
+    import "../scripts/market.ts";
+  </script>
 </BaseLayout>
+
+<style is:global>
+  .market .m-carousel:nth-of-type(even) {
+    background: color-mix(in srgb, var(--veil) 55%, transparent);
+  }
+
+  .market .m-carousel:nth-of-type(even) .m-carousel__viewport::before {
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--veil) 55%, var(--paper)) 15%,
+      transparent
+    );
+  }
+
+  .market .m-carousel:nth-of-type(even) .m-carousel__viewport::after {
+    background: linear-gradient(
+      270deg,
+      color-mix(in srgb, var(--veil) 55%, var(--paper)) 15%,
+      transparent
+    );
+  }
+</style>

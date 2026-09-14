@@ -1,0 +1,353 @@
+---
+import type { MarketplaceCommunity } from "../../data/marketplace-communities";
+import {
+  communityMonogram,
+  relativeListedLabel,
+} from "../../data/marketplace-communities";
+
+interface Props {
+  community: MarketplaceCommunity;
+  /** 1-based rank for Top carousel */
+  rank?: number;
+  /** Show relative listed date (New carousel) */
+  showNew?: boolean;
+  /** Dense layout for explore grid */
+  compact?: boolean;
+}
+
+const { community: c, rank, showNew = false, compact = false } = Astro.props;
+const monogram = communityMonogram(c.name);
+const isBuzzScheme = c.joinUrl.startsWith("buzz://");
+const accent = c.accent ?? "#3D6B8C";
+const joinLabel = c.access === "public" ? "Join" : "Open in Buzz";
+const newLabel = showNew ? relativeListedLabel(c.listedAt) : null;
+---
+
+<article
+  class:list={["m-card", compact && "m-card--compact"]}
+  style={`--card-accent: ${accent}`}
+  data-community-id={c.id}
+  data-tags={c.tags.join(",")}
+  data-access={c.access}
+  data-name={c.name.toLowerCase()}
+>
+  <div class="m-card__top">
+    <div class="m-card__mark-wrap">
+      {
+        rank != null && (
+          <span class="m-card__rank" aria-label={`Rank ${rank}`}>
+            #{rank}
+          </span>
+        )
+      }
+      <div class="m-card__mark" aria-hidden="true">{monogram}</div>
+    </div>
+    <div class="m-card__badges">
+      {
+        newLabel && (
+          <span class="m-card__new" title={c.listedAt}>
+            {newLabel}
+          </span>
+        )
+      }
+      <span
+        class:list={[
+          "m-card__access",
+          c.access === "public" ? "is-public" : "is-invite",
+        ]}
+      >
+        {c.access === "public" ? "Public" : "Invite"}
+      </span>
+    </div>
+  </div>
+
+  <h3 class="m-card__name">{c.name}</h3>
+  <p class="m-card__blurb">{c.blurb}</p>
+
+  {
+    c.tags.length > 0 && (
+      <ul class="m-card__tags">
+        {c.tags.slice(0, 3).map((t) => (
+          <li data-tag={t}>{t}</li>
+        ))}
+      </ul>
+    )
+  }
+
+  {
+    c.host && (
+      <p class="m-card__host" title={c.host}>
+        <span class="m-card__host-text">{c.host}</span>
+        <button
+          type="button"
+          class="m-card__copy"
+          data-copy={c.host}
+          aria-label={`Copy host ${c.host}`}
+          title="Copy host"
+        >
+          Copy
+        </button>
+      </p>
+    )
+  }
+
+  <div class="m-card__foot">
+    <a
+      class="m-card__join"
+      href={c.joinUrl}
+      target={isBuzzScheme ? undefined : "_blank"}
+      rel={isBuzzScheme ? undefined : "noopener noreferrer"}
+    >
+      {joinLabel}
+      <span aria-hidden="true">→</span>
+    </a>
+    {
+      c.source === "buzzftw" && (
+        <span class="m-card__source">BuzzFTW</span>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .m-card {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 min(18.75rem, 82vw);
+    width: min(18.75rem, 82vw);
+    min-height: 17rem;
+    padding: 1.2rem 1.25rem 1.15rem;
+    border: 1px solid var(--ghost);
+    border-radius: 14px;
+    background:
+      linear-gradient(
+        165deg,
+        color-mix(in srgb, var(--card-accent) 7%, var(--paper)) 0%,
+        var(--paper) 42%
+      );
+    box-shadow: 0 1px 0 rgba(26, 28, 34, 0.03);
+    scroll-snap-align: start;
+    transition:
+      border-color var(--duration) var(--ease),
+      box-shadow var(--duration) var(--ease),
+      transform var(--duration) var(--ease);
+  }
+
+  .m-card--compact {
+    flex: 1 1 auto;
+    width: auto;
+    min-height: 15.5rem;
+    height: 100%;
+  }
+
+  .m-card:hover {
+    border-color: color-mix(in srgb, var(--card-accent) 40%, var(--ghost-strong));
+    box-shadow:
+      0 12px 32px rgba(26, 28, 34, 0.07),
+      0 0 0 1px color-mix(in srgb, var(--card-accent) 12%, transparent);
+    transform: translateY(-3px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .m-card:hover {
+      transform: none;
+    }
+  }
+
+  .m-card__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .m-card__mark-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .m-card__rank {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--slate);
+    min-width: 1.5rem;
+  }
+
+  .m-card__mark {
+    display: grid;
+    place-items: center;
+    width: 2.55rem;
+    height: 2.55rem;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--card-accent) 18%, var(--paper));
+    color: var(--card-accent);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--card-accent) 18%, transparent);
+  }
+
+  .m-card__badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.3rem;
+  }
+
+  .m-card__new,
+  .m-card__access {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.28rem 0.5rem;
+    border-radius: 999px;
+    border: 1px solid var(--ghost);
+    color: var(--slate);
+    white-space: nowrap;
+  }
+
+  .m-card__new {
+    background: var(--signal-soft);
+    border-color: var(--signal-mid);
+    color: var(--signal);
+  }
+
+  .m-card__access.is-public {
+    border-color: color-mix(in srgb, var(--honey) 40%, var(--ghost));
+    background: var(--honey-soft);
+    color: color-mix(in srgb, var(--ink) 75%, #b8860b);
+  }
+
+  .m-card__access.is-invite {
+    background: var(--veil);
+  }
+
+  .m-card__name {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-body);
+    font-size: 1.08rem;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    line-height: 1.25;
+  }
+
+  .m-card__blurb {
+    margin: 0;
+    flex: 1;
+    font-size: var(--text-sm);
+    line-height: 1.48;
+    color: var(--slate);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .m-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    list-style: none;
+    margin: 0.85rem 0 0;
+    padding: 0;
+  }
+
+  .m-card__tags li {
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
+    padding: 0.22rem 0.48rem;
+    border-radius: 5px;
+    background: color-mix(in srgb, var(--veil) 80%, white);
+    color: var(--slate);
+    border: 1px solid var(--ghost);
+  }
+
+  .m-card__host {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0.7rem 0 0;
+    min-width: 0;
+  }
+
+  .m-card__host-text {
+    flex: 1;
+    min-width: 0;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: color-mix(in srgb, var(--slate) 85%, transparent);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .m-card__copy {
+    flex-shrink: 0;
+    border: 0;
+    background: transparent;
+    padding: 0.15rem 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--signal);
+    cursor: pointer;
+    opacity: 0.75;
+  }
+
+  .m-card__copy:hover,
+  .m-card__copy.is-copied {
+    opacity: 1;
+  }
+
+  .m-card__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: auto;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--ghost);
+  }
+
+  .m-card__join {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .m-card__join span {
+    opacity: 0.5;
+    transition:
+      transform var(--duration) var(--ease),
+      opacity var(--duration) var(--ease);
+  }
+
+  .m-card__join:hover {
+    color: var(--signal);
+  }
+
+  .m-card__join:hover span {
+    opacity: 1;
+    transform: translateX(2px);
+  }
+
+  .m-card__source {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--honey) 70%, var(--ink));
+  }
+</style>

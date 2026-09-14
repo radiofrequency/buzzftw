@@ -11,7 +11,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "build:api": "npm run build --prefix packages/buzz-api",
-    "build:runtime": "npm run build --prefix packages/buzz-runtime"
+    "build:runtime": "npm run build --prefix packages/buzz-runtime",
+    "sync:directory": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/sync-buzz-directory.ts"
   },
   "dependencies": {
     "astro": "^7.1.4"

@@ -38,9 +38,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Space for fixed mobile CTA so footer isn’t covered */
+/* Space for fixed mobile CTA when present */
 @media (max-width: 767px) {
-  body {
+  body:has(.float-cta) {
     padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
   }
 }
@@ -62,6 +62,15 @@ img,
 svg {
   display: block;
   max-width: 100%;
+}
+
+/* Inline images (eyebrow marks, etc.) keep flow spacing */
+img.inline,
+.nav__mark,
+.footer__brand img,
+.bz-chrome__brand img {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 a {
@@ -198,6 +207,19 @@ a:hover {
 .btn:hover .btn__arrow {
   opacity: 1;
   transform: translateX(2px);
+}
+
+/* Solid primary CTA (marketplace launch, etc.) */
+.btn--solid {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.btn--solid:hover {
+  background: color-mix(in srgb, var(--ink) 88%, var(--honey));
+  border-color: color-mix(in srgb, var(--ink) 88%, var(--honey));
+  color: var(--paper);
 }
 
 /* Reveal on scroll */
