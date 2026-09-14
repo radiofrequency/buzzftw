@@ -64,7 +64,7 @@ Apex `buzzftw.com` / `www` stay on the existing CloudFront/S3 marketplace host. 
 
 ## Marketplace directory sync
 
-The homepage catalog is curated helpers in [`src/data/marketplace-communities.ts`](src/data/marketplace-communities.ts) plus a generated list from [buzz.directory](https://buzz.directory/). Relays are read from each listing’s detail-page `buzz://` deep link — slugs are never guessed as hosts.
+The homepage catalog is the generated list from [buzz.directory](https://buzz.directory/) in [`src/data/marketplace-communities.generated.ts`](src/data/marketplace-communities.generated.ts). Editorial `featuredRank` / accent overrides for directory-sourced communities live in [`src/data/marketplace-communities.ts`](src/data/marketplace-communities.ts). Relays are read from each listing’s detail-page `buzz://` deep link — slugs are never guessed as hosts.
 
 ### Local
 
@@ -73,7 +73,7 @@ npm run sync:directory -- --dry-run   # fetch + merge, print counts, do not writ
 npm run sync:directory                # update src/data/marketplace-communities.generated.ts
 ```
 
-The scraper uses native `fetch` (2 concurrent detail requests, 15s timeouts). It copies invite tokens only when the directory publishes them, and keeps curated `featuredRank` / accent / BuzzFTW-only rows.
+The scraper uses native `fetch` (2 concurrent detail requests, 15s timeouts). It copies invite tokens only when the directory publishes them. Editorial `featuredRank` / accent overrides for directory-sourced communities are applied at merge time and are not written into the generated file.
 
 ### Weekday routine (Grok Bot box)
 
