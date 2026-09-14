@@ -62,11 +62,44 @@ Buzz infra is **not** deployed by GitHub Actions from this repo:
 
 Apex `buzzftw.com` / `www` stay on the existing CloudFront/S3 marketplace host. Community `*.buzzftw.com` already hits Hetzner. Do not touch `folstad.ca` DNS (separate Folstad Site CloudFront).
 
+## Marketplace directory sync
+
+The homepage catalog is curated helpers in [`src/data/marketplace-communities.ts`](src/data/marketplace-communities.ts) plus a generated list from [buzz.directory](https://buzz.directory/). Relays are read from each listing’s detail-page `buzz://` deep link — slugs are never guessed as hosts.
+
+### Local
+
+```bash
+npm run sync:directory -- --dry-run   # fetch + merge, print counts, do not write
+npm run sync:directory                # update src/data/marketplace-communities.generated.ts
+```
+
+The scraper uses native `fetch` (2 concurrent detail requests, 15s timeouts). It copies invite tokens only when the directory publishes them, and keeps curated `featuredRank` / accent / BuzzFTW-only rows.
+
+### Daily job
+
+[`.github/workflows/sync-buzz-directory.yml`](.github/workflows/sync-buzz-directory.yml) runs every day at 13:15 UTC and on `workflow_dispatch`:
+
+1. Sync the directory into the generated catalog
+2. If data changed, commit to the current branch with `[skip ci]` (avoids a workflow loop)
+3. Build the Astro site (`PUBLIC_COGNITO_*` from repo variables when set)
+4. Deploy to S3 + CloudFront **only when** `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` secrets exist. Defaults: `MARKETING_BUCKET=buzzftw-com-marketing`, `MARKETING_DISTRIBUTION_ID=EF2IOL0B900JI`.
+
+If those AWS secrets are missing, deploy stays manual:
+
+```bash
+export MARKETING_BUCKET=buzzftw-com-marketing
+export MARKETING_DISTRIBUTION_ID=EF2IOL0B900JI
+./scripts/deploy-site.sh
+```
+
 ## Brand assets
 
 | File | Use |
 |------|-----|
 | `public/mark.svg` | Aperture mark |
 | `public/logo.svg` | Mark + wordmark |
-| `public/favicon.svg` | Favicon |
+| `public/favicon.ico` | Favicon (matches [buzz.directory](https://buzz.directory/)) |
+| `public/favicon-16x16.png` / `favicon-32x32.png` | Sized PNG favicons |
+| `public/apple-touch-icon.png` | Apple touch icon |
+| `public/site.webmanifest` | Web app manifest |
 | `assets/brand/` | Logo explorations (not required at runtime) |
