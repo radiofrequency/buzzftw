@@ -18,6 +18,10 @@ import {
   type ListedCommunity,
   type ResolvedCommunity,
 } from "./lib/buzz-directory.ts";
+import {
+  inviteTokenFromJoinUrl,
+  shouldFallbackExpiredPublicInvite,
+} from "./lib/buzz-invite.ts";
 
 type AccessMode = "public" | "invite";
 
@@ -165,24 +169,43 @@ function buzzAdd(host: string, name: string): string {
   return `buzz://add-community?relay=${relay}&name=${encodeURIComponent(name)}`;
 }
 
+/**
+ * Prefer a published invite token when it is still usable. Expired v1 tokens
+ * on Public listings fall back to buzz://add-community (relay join). Invite-
+ * only listings keep the published invite URL even if expired — converting
+ * those to add-community would imply open join. v2 codes have no parseable
+ * expiry and are kept as published.
+ */
 function mergeJoinUrl(
   existing: MarketplaceCommunity | undefined,
   host: string,
   name: string,
+  access: AccessMode,
   inviteCode?: string,
-): string {
-  if (inviteCode) return inviteHttps(host, inviteCode);
-  if (existing?.joinUrl && !existing.joinUrl.startsWith("buzz://")) {
-    return existing.joinUrl;
+): { joinUrl: string; expiredPublicFallback: boolean } {
+  if (inviteCode && !shouldFallbackExpiredPublicInvite(access, inviteCode)) {
+    return { joinUrl: inviteHttps(host, inviteCode), expiredPublicFallback: false };
   }
-  return buzzAdd(host, name);
+
+  if (shouldFallbackExpiredPublicInvite(access, inviteCode)) {
+    return { joinUrl: buzzAdd(host, name), expiredPublicFallback: true };
+  }
+
+  if (existing?.joinUrl && !existing.joinUrl.startsWith("buzz://")) {
+    const existingToken = inviteTokenFromJoinUrl(existing.joinUrl);
+    if (shouldFallbackExpiredPublicInvite(access, existingToken)) {
+      return { joinUrl: buzzAdd(host, name), expiredPublicFallback: true };
+    }
+    return { joinUrl: existing.joinUrl, expiredPublicFallback: false };
+  }
+  return { joinUrl: buzzAdd(host, name), expiredPublicFallback: false };
 }
 
 function toRecord(
   row: ResolvedCommunity,
   existing: MarketplaceCommunity | undefined,
   listedAtNow: string,
-): MarketplaceCommunity {
+): { record: MarketplaceCommunity; expiredPublicFallback: boolean } {
   const short = marketplaceIdFromDirectorySlug(row.directorySlug);
   const host = hostFromRelayUrl(row.relayUrl);
   const name = row.name || existing?.name || short;
@@ -191,21 +214,31 @@ function toRecord(
     existing?.tags?.length ? existing.tags : mapped ? [mapped] : [];
   const access: AccessMode =
     row.access ?? existing?.access ?? (row.inviteCode ? "public" : "invite");
+  const { joinUrl, expiredPublicFallback } = mergeJoinUrl(
+    existing,
+    host,
+    name,
+    access,
+    row.inviteCode,
+  );
 
   return {
-    id: existing?.id ?? short,
-    name,
-    slug: existing?.slug ?? short,
-    blurb:
-      row.description && row.description !== existing?.blurb
-        ? row.description
-        : (existing?.blurb ?? row.description ?? ""),
-    tags,
-    access,
-    joinUrl: mergeJoinUrl(existing, host, name, row.inviteCode),
-    host,
-    listedAt: existing?.listedAt ?? listedAtNow,
-    source: existing?.source ?? "external",
+    record: {
+      id: existing?.id ?? short,
+      name,
+      slug: existing?.slug ?? short,
+      blurb:
+        row.description && row.description !== existing?.blurb
+          ? row.description
+          : (existing?.blurb ?? row.description ?? ""),
+      tags,
+      access,
+      joinUrl,
+      host,
+      listedAt: existing?.listedAt ?? listedAtNow,
+      source: existing?.source ?? "external",
+    },
+    expiredPublicFallback,
   };
 }
 
@@ -277,11 +310,17 @@ async function main() {
   let added = 0;
   let updated = 0;
   let unchanged = 0;
+  let expiredPublicFallback = 0;
 
   for (const row of resolved) {
     const host = hostFromRelayUrl(row.relayUrl);
     const existing = findExisting(row, host, previous);
-    const next = toRecord(row, existing, listedAtNow);
+    const { record: next, expiredPublicFallback: fellBack } = toRecord(
+      row,
+      existing,
+      listedAtNow,
+    );
+    if (fellBack) expiredPublicFallback += 1;
     const prev = existing ? byId.get(existing.id) : undefined;
     if (!prev) {
       byId.set(next.id, next);
@@ -306,6 +345,7 @@ async function main() {
       `updated=${updated}`,
       `unchanged=${unchanged}`,
       `skipped=${skipped.length}`,
+      `expiredPublicFallback=${expiredPublicFallback}`,
       `kept=${nextRows.length}`,
     ].join(" "),
   );

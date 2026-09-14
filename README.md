@@ -73,7 +73,7 @@ npm run sync:directory -- --dry-run   # fetch + merge, print counts, do not writ
 npm run sync:directory                # update src/data/marketplace-communities.generated.ts
 ```
 
-The scraper uses native `fetch` (2 concurrent detail requests, 15s timeouts). It copies invite tokens only when the directory publishes them. Editorial `featuredRank` / accent overrides for directory-sourced communities are applied at merge time and are not written into the generated file.
+The scraper uses native `fetch` (2 concurrent detail requests, 15s timeouts). It copies invite tokens only when the directory publishes them. Expired Buzz v1 invite tokens (payload `e` in the past) on **Public** listings are not copied; those rows use `buzz://add-community` (relay join) instead. Invite-only listings keep their published invite URL even if that token is expired, so sync does not imply open join. v2 tokens have no parseable expiry and are kept as published. Editorial `featuredRank` / accent overrides for directory-sourced communities are applied at merge time and are not written into the generated file.
 
 ### Weekday routine (Grok Bot box)
 
