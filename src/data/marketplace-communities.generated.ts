@@ -28,7 +28,7 @@ export const DIRECTORY_COMMUNITIES: MarketplaceCommunity[] = [
       "Bitcoin"
     ],
     "access": "public",
-    "joinUrl": "https://banking.communities.buzz.xyz/invite/eyJjIjoiNjlmOTkxYmYtNmU2My00NmFkLTgwZGItYjljMTlmNzVmMGMzIiwiciI6Im1lbWJlciIsImUiOjE3ODc1NTI0NTEsIm4iOiIwaFhGNzNXc29zUV9BbUliOU4taVBnIn0.6-iw4VUbS864MnrH_O6yQEMG07O6DZimHfyUFW1Jgiw",
+    "joinUrl": "buzz://add-community?relay=wss%3A%2F%2Fbanking.communities.buzz.xyz&name=banking",
     "host": "banking.communities.buzz.xyz",
     "listedAt": "2026-09-14T07:58:47.062Z",
     "source": "external"
@@ -84,7 +84,7 @@ export const DIRECTORY_COMMUNITIES: MarketplaceCommunity[] = [
       "Bitcoin"
     ],
     "access": "public",
-    "joinUrl": "https://bitcoiners.communities.buzz.xyz/invite/eyJjIjoiYTA5NDYzZmQtNjZkZi00ZWEyLTgwYmEtNjgyYTEzMmJhNmY5IiwiciI6Im1lbWJlciIsImUiOjE3ODcyNzM2ODUsIm4iOiJWTTA4bERLdE00UnJMSmlPS2gxVURRIn0.bY5XmlEijuWFpNJL5Xm-PWg4x3eBIZ3c080cTdOJIY8",
+    "joinUrl": "buzz://add-community?relay=wss%3A%2F%2Fbitcoiners.communities.buzz.xyz&name=bitcoiners",
     "host": "bitcoiners.communities.buzz.xyz",
     "listedAt": "2026-07-18T00:00:00Z",
     "source": "external"
@@ -98,7 +98,7 @@ export const DIRECTORY_COMMUNITIES: MarketplaceCommunity[] = [
       "Bitcoin"
     ],
     "access": "public",
-    "joinUrl": "https://bitcoinplaintalk.communities.buzz.xyz/invite/eyJjIjoiNjNlNzJkY2YtM2U4ZC00MWViLWEyZTQtNzg2MzVkM2ZlNTdkIiwiciI6Im1lbWJlciIsImUiOjE3ODczOTA4NzksIm4iOiJ0X0R5NVBnNjJ5QlQtbGRjZk54WmFnIn0.MJkUldcUAqn-fV4JF9XN8zOY7qVpO98iHMV0s7Wty_M",
+    "joinUrl": "buzz://add-community?relay=wss%3A%2F%2Fbitcoinplaintalk.communities.buzz.xyz&name=bitcoinplaintalk",
     "host": "bitcoinplaintalk.communities.buzz.xyz",
     "listedAt": "2026-09-14T07:58:47.062Z",
     "source": "external"
@@ -172,7 +172,7 @@ export const DIRECTORY_COMMUNITIES: MarketplaceCommunity[] = [
       "Craft"
     ],
     "access": "public",
-    "joinUrl": "https://designers.communities.buzz.xyz/invite/eyJjIjoiNzQ4ZmQxNDItMDZkNC00MzllLThmYzgtZTcyN2QwNGNlMGQwIiwiciI6Im1lbWJlciIsImUiOjE3ODczNTc5NjQsIm4iOiJVWEtPNUk3eHE5WVJKYzM4c3Q2LUxnIn0.Kdjs4eezkC9QHdIFasYT74qYMEzQ6W_e3lqYw0pikF4",
+    "joinUrl": "buzz://add-community?relay=wss%3A%2F%2Fdesigners.communities.buzz.xyz&name=designers",
     "host": "designers.communities.buzz.xyz",
     "listedAt": "2026-07-19T00:00:00Z",
     "source": "external"
@@ -286,7 +286,7 @@ export const DIRECTORY_COMMUNITIES: MarketplaceCommunity[] = [
       "GTM"
     ],
     "access": "public",
-    "joinUrl": "https://gtmelite.communities.buzz.xyz/invite/eyJjIjoiYTIxMjgzYjQtYmM5MS00YjJjLWFkNjYtYzUyNzRjMGY2MzJjIiwiciI6Im1lbWJlciIsImUiOjE3ODU0Nzc1NzgsIm4iOiIwRC1WYWFKZ0ZXLU4zdWRZV1FwX3BRIn0.9nYN2hRODA85FwDKEoXWVNcb9OA1nI0ixrxMyD4aQsg",
+    "joinUrl": "buzz://add-community?relay=wss%3A%2F%2Fgtmelite.communities.buzz.xyz&name=gtmelite",
     "host": "gtmelite.communities.buzz.xyz",
     "listedAt": "2026-07-12T00:00:00Z",
     "source": "external"
@@ -471,7 +471,7 @@ export const DIRECTORY_COMMUNITIES: MarketplaceCommunity[] = [
       "Builders"
     ],
     "access": "public",
-    "joinUrl": "https://openb.communities.buzz.xyz/invite/eyJjIjoiMjkzMDgxZTYtNTliZi00NmEzLWIzZmMtNjJlNWU1NWFiYjY2IiwiciI6Im1lbWJlciIsImUiOjE3ODc1OTIxNjYsIm4iOiIxenJpaTg1ZXluTlVJbG5NVURQODRnIn0.7ko5blYq32hcVIs0Kx6zFZXzMK6syZqnmcWUFaBNKVI",
+    "joinUrl": "buzz://add-community?relay=wss%3A%2F%2Fopenb.communities.buzz.xyz&name=openb",
     "host": "openb.communities.buzz.xyz",
     "listedAt": "2026-07-24T00:00:00Z",
     "source": "external"
@@ -513,7 +513,7 @@ export const DIRECTORY_COMMUNITIES: MarketplaceCommunity[] = [
       "Culture"
     ],
     "access": "public",
-    "joinUrl": "https://romeo-and-juliet.communities.buzz.xyz/invite/eyJjIjoiZGRmMTE5ZTMtY2VmNS00MTZhLTg5NWYtYzA1ODhlY2UwOTFkIiwiciI6Im1lbWJlciIsImUiOjE3ODc2MTkzOTgsIm4iOiI1UHFHZVZUWTB5ZEQzaFJUN1hpdTZnIn0.4H9i2eAlkPkbyhegS5j6W5QaH1iJF2-cNdXiXZ0ffBs",
+    "joinUrl": "buzz://add-community?relay=wss%3A%2F%2Fromeo-and-juliet.communities.buzz.xyz&name=romeo-and-juliet",
     "host": "romeo-and-juliet.communities.buzz.xyz",
     "listedAt": "2026-07-25T00:00:00Z",
     "source": "external"
@@ -541,7 +541,7 @@ export const DIRECTORY_COMMUNITIES: MarketplaceCommunity[] = [
       "Builders"
     ],
     "access": "public",
-    "joinUrl": "https://tech.communities.buzz.xyz/invite/eyJjIjoiNGZkNWIyZDQtNDAzMC00MGJkLWEwYWYtYTJiNGEzMDQ2ODNkIiwiciI6Im1lbWJlciIsImUiOjE3ODcyNTMwOTQsIm4iOiJ5ZjlGTWl0Nl9FTTV6LUEwd25aejN3In0.gPI0qFGtcPElliKWSDplj-GQ_yR6-Hx9koXd5uIGW2Y",
+    "joinUrl": "buzz://add-community?relay=wss%3A%2F%2Ftech.communities.buzz.xyz&name=tech",
     "host": "tech.communities.buzz.xyz",
     "listedAt": "2026-07-17T00:00:00Z",
     "source": "external"
@@ -555,7 +555,7 @@ export const DIRECTORY_COMMUNITIES: MarketplaceCommunity[] = [
       "Culture"
     ],
     "access": "public",
-    "joinUrl": "https://thakaly.communities.buzz.xyz/invite/eyJjIjoiNDk4NGNkZDMtZTRkOS00NzJkLThhZWYtZTUwMzhkMDJlOWZiIiwiciI6Im1lbWJlciIsImUiOjE3ODc3NDAxMDQsIm4iOiJJSXVlV2dndEVybGFnaFBrN0dEODBnIn0.V2CuaeuExx9y0tUzRaGPbUVHj1fWQ9qTfhZ5MwFYPHw",
+    "joinUrl": "buzz://add-community?relay=wss%3A%2F%2Fthakaly.communities.buzz.xyz&name=thakaly",
     "host": "thakaly.communities.buzz.xyz",
     "listedAt": "2026-07-27T00:00:00Z",
     "source": "external"
@@ -583,7 +583,7 @@ export const DIRECTORY_COMMUNITIES: MarketplaceCommunity[] = [
       "Builders"
     ],
     "access": "public",
-    "joinUrl": "https://vibecoding.communities.buzz.xyz/invite/eyJjIjoiZjcyNDY1ODQtNjUwOC00NzVhLTg0YTgtNTBlMWE1Y2EyNDljIiwiciI6Im1lbWJlciIsImUiOjE3ODc2ODA0NzUsIm4iOiJGaVVjWTJjM28wa1ZoUTlqcWFOVWNBIn0.mV5XkkA6vht98VyqdYCGYXPgZnSSZcBm5fleVULzqIc",
+    "joinUrl": "buzz://add-community?relay=wss%3A%2F%2Fvibecoding.communities.buzz.xyz&name=vibecoding",
     "host": "vibecoding.communities.buzz.xyz",
     "listedAt": "2026-07-26T00:00:00Z",
     "source": "external"
