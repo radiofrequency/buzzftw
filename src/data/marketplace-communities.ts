@@ -1,5 +1,5 @@
 /**
- * Curated Buzz community catalog for the marketplace homepage.
+ * Marketplace catalog: buzz.directory rows plus editorial rank/accent overrides.
  * Directory rows: marketplace-communities.generated.ts (npm run sync:directory).
  */
 
@@ -27,12 +27,7 @@ export type MarketplaceCommunity = {
   accent?: string;
 };
 
-function buzzAdd(relayHost: string, name: string): string {
-  const relay = encodeURIComponent(`wss://${relayHost}`);
-  return `buzz://add-community?relay=${relay}&name=${encodeURIComponent(name)}`;
-}
-
-/** Editorial rank / accent — preserved across directory sync. */
+/** Editorial rank / accent for directory-sourced communities — preserved across sync. */
 export const CURATED_OVERRIDES: Record<string, Partial<MarketplaceCommunity>> = {
   buzzdir: { featuredRank: 1, accent: "#3D6B8C" },
   bitcoiners: { featuredRank: 2, accent: "#F0B429" },
@@ -49,50 +44,19 @@ export const CURATED_OVERRIDES: Record<string, Partial<MarketplaceCommunity>> = 
   "devin-builders": { featuredRank: 13, accent: "#2D6A8F" },
   ldk: { featuredRank: 14, accent: "#F7931A" },
   monero: { featuredRank: 15, accent: "#FF6600" },
-  "buzzftw-builders": { featuredRank: 16, accent: "#F0B429" },
-  thakaly: { featuredRank: 17, accent: "#9B6B9E" },
-  "romeo-and-juliet": { featuredRank: 18, accent: "#C45C6A" },
+  thakaly: { featuredRank: 16, accent: "#9B6B9E" },
+  "romeo-and-juliet": { featuredRank: 17, accent: "#C45C6A" },
 };
-
-/** Rows that are not sourced from buzz.directory. */
-export const CURATED_COMMUNITIES: MarketplaceCommunity[] = [
-  {
-    id: "buzzftw-builders",
-    name: "BuzzFTW Builders",
-    slug: "builders",
-    blurb:
-      "BuzzFTW operators launching public & private relays — humans, agents, Lightning hosting.",
-    tags: ["BuzzFTW", "Builders"],
-    access: "invite",
-    joinUrl: buzzAdd("builders.buzzftw.com", "BuzzFTW Builders"),
-    host: "builders.buzzftw.com",
-    listedAt: "2026-07-30T12:00:00Z",
-    source: "buzzftw",
-  },
-];
 
 export function mergeMarketplaceCommunities(
   directory: MarketplaceCommunity[],
   overrides: Record<string, Partial<MarketplaceCommunity>>,
-  curated: MarketplaceCommunity[],
 ): MarketplaceCommunity[] {
-  const byId = new Map<string, MarketplaceCommunity>();
-  for (const row of directory) {
-    byId.set(row.id, { ...row, ...overrides[row.id] });
-  }
-  for (const row of curated) {
-    if (byId.has(row.id)) continue;
-    byId.set(row.id, { ...row, ...overrides[row.id] });
-  }
-  return [...byId.values()];
+  return directory.map((row) => ({ ...row, ...overrides[row.id] }));
 }
 
 export const MARKETPLACE_COMMUNITIES: MarketplaceCommunity[] =
-  mergeMarketplaceCommunities(
-    DIRECTORY_COMMUNITIES,
-    CURATED_OVERRIDES,
-    CURATED_COMMUNITIES,
-  );
+  mergeMarketplaceCommunities(DIRECTORY_COMMUNITIES, CURATED_OVERRIDES);
 
 const TOP_LIMIT = 12;
 const NEW_LIMIT = 12;
